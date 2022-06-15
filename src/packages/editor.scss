@@ -13,7 +13,8 @@
 
   &-left {
     left: 0;
-    &-item{
+
+    &-item {
       width: 250px;
       height: 100px;
       margin: 20px auto;
@@ -25,13 +26,15 @@
       cursor: move;
       user-select: none;
       position: relative;
-      > span{
+
+      >span {
         position: absolute;
         top: 0;
         left: 0;
-        background-color: rgb(96, 205,244);
+        background-color: rgb(96, 205, 244);
       }
-      &::after{
+
+      &::after {
         content: '';
         position: absolute;
         top: 0;
@@ -55,14 +58,17 @@
     left: 280px;
     background-color: palegreen;
   }
-  &-container{
+
+  &-container {
     padding: 80px 270px 0;
     height: 100%;
     box-sizing: border-box;
-    &-canvas{
+
+    &-canvas {
       overflow: scroll;
       height: 100%;
-      &_content{
+
+      &_content {
         margin: 20px auto;
         width: 550px;
         height: 550px;
@@ -72,6 +78,23 @@
     }
   }
 }
-.editor-block{
+
+.editor-block {
   position: absolute;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+.editor-block-focus {
+
+  &::after {
+    border: 1px dashed #f00;
+  }
 }
