@@ -17,7 +17,7 @@ function createEditorConfig() {
   }
 }
 export let registerConfig = createEditorConfig();
-console.log('registerConfig', registerConfig);
+
 registerConfig.register({
   label: 'wenben',
   preview: () => '预览文本',

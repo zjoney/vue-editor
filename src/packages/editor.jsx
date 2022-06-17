@@ -4,6 +4,8 @@ import './editor.scss'
 import EditorBlocks from "./editor-block.jsx";
 import deepcopy from "deepcopy";
 import { useMenuDragger } from "./useMenuDraggers";
+import { useFocus } from './useFocus'
+import { useBlockDragger } from "./useBlockDragger";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -31,32 +33,18 @@ export default defineComponent({
     //1、 实现菜单拖拽功能
     let { dragstart, dragend } = useMenuDragger(containerRef, data);
 
-    // 2、获取焦点
+    // 2、获取焦点, 选中可能直接进行拖拽
+    let { blockMousedown, containerMounseDown,
+      focusData } = useFocus(data, (e) => {
+        // 实现焦点后拖拽
+        onMousedown(e)
+      });
+    // 实现组件拖拽
+    let { onMousedown } = useBlockDragger(focusData)
 
 
     // 3、实现拖拽多个元素
-    const clearBlockFocus = () => {
-      data.value.blocks.forEach(block => block.focus = false)
-    }
-    const blockMousedown = (e, block) => {
-      e.preventDefault();
-      e.stopPropagation();
-      //  block上我们规划一个属性，focus获取焦点后将focus变为true
-      if (e.shiftKey) {
-        block.focus = !block.focus;
-      } else {
-        if (!block.focus) {
-          clearBlockFocus();
-          block.focus = true; //要清空其他focus
-        } else {
-          block.focus = false;
-        }
-      }
-    }
-    // 点击容器让选中的失去焦点
-    const containerMounseDown = () => {
-      clearBlockFocus();
-    }
+    // 点击容器让选中的失去焦点  containerMounseDown
     return () => <div class="editor">
       {/* 根据注册列表渲染内容 可以实现H5拖拽*/}
       <div class="editor-left">
