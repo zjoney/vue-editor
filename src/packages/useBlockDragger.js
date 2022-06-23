@@ -19,8 +19,8 @@ export function useBlockDragger(focusData) {
     let durX = moveX - dragState.startX;
     let durY = moveY - dragState.startY;
     focusData.value.focus.forEach((block, index) => {
-      block.top = dragState.startPos[index].top + durX
-      block.left = dragState.startPos[index].left + durY
+      block.top = dragState.startPos[index].top + durY
+      block.left = dragState.startPos[index].left + durX
     })
   }
   const onMouseup = (e) => {
