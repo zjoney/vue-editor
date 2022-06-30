@@ -13,9 +13,9 @@ export function useBlockDragger(focusData, lastSelectBlock) {
         top, left
       })),
       lines: (() => {
-        const { unfoused } = focusData.value;// 记录没选中的位置做辅助线
+        const { unfocused } = focusData.value;// 记录没选中的位置做辅助线
         let lines = { x: [], y: [] };
-        unfoused.forEach((block) => {
+        unfocused.forEach((block) => {
           const { top: ATop, left: ALeft, width: AWidth, height: AHeight } = block;
           // 当此元素拖拽到和A元素top一致的时候，要显示这根辅助线
           lines.y.push({ showTop: ATop, top: ATop, })
