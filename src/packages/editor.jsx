@@ -34,13 +34,13 @@ export default defineComponent({
     let { dragstart, dragend } = useMenuDragger(containerRef, data);
 
     // 2、获取焦点, 选中可能直接进行拖拽
-    let { blockMousedown, containerMounseDown,
+    let { blockMousedown, containerMounseDown,lastSelectBlock,
       focusData } = useFocus(data, (e) => {
         // 实现焦点后拖拽
         onMousedown(e)
       });
     // 实现组件拖拽
-    let { onMousedown } = useBlockDragger(focusData)
+    let { onMousedown } = useBlockDragger(focusData, lastSelectBlock)
 
 
     // 3、实现拖拽多个元素
@@ -69,10 +69,10 @@ export default defineComponent({
             onMousedown={containerMounseDown}
           >
             {
-              data.value.blocks.map((block) => (
+              data.value.blocks.map((block, index) => (
                 <EditorBlocks
                   class={block.focus ? 'editor-block-focus' : ''}
-                  onMousedown={(e) => blockMousedown(e, block)}
+                  onMousedown={(e) => blockMousedown(e, block, index)}
                   block={block}></EditorBlocks>
               ))
             }

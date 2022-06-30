@@ -1,4 +1,4 @@
-export function useBlockDragger(focusData) {
+export function useBlockDragger(focusData, lastSelectBlock) {
   let dragState = {
     startX: 0,
     startY: 0
@@ -15,6 +15,7 @@ export function useBlockDragger(focusData) {
     document.addEventListener('mouseup', onMouseup)
   }
   const onMousemove = (e) => {
+    console.log('move')
     let { clientX: moveX, clientY: moveY } = e;
     let durX = moveX - dragState.startX;
     let durY = moveY - dragState.startY;

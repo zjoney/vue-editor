@@ -32,8 +32,8 @@ registerConfig.register({
 })
 registerConfig.register({
   label: '输入框',
-  preview: () => <ElInput>预览输入框</ElInput>,
-  render: () => <ElInput>渲染输入框</ElInput>,
+  preview: () => <ElInput placeholder='预览输入框'></ElInput>,
+  render: () => <ElInput  placeholder='渲染输入框'></ElInput>,
   key: 'input',
 })
 
