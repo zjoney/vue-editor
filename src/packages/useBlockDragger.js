@@ -1,6 +1,6 @@
 import { reactive } from "vue"
 
-export function useBlockDragger(focusData, lastSelectBlock) {
+export function useBlockDragger(focusData, lastSelectBlock, data) {
   let dragState = {
     startX: 0,
     startY: 0
@@ -23,7 +23,14 @@ export function useBlockDragger(focusData, lastSelectBlock) {
       lines: (() => {
         const { unfocused } = focusData.value;// 记录没选中的位置做辅助线
         let lines = { x: [], y: [] };
-        unfocused.forEach((block) => {
+        [...unfocused,
+        {
+          top: 0,
+          left: 0,
+          width: data.value.container.width,
+          height: data.value.container.height,
+        }
+        ].forEach((block) => {
           const { top: ATop, left: ALeft, width: AWidth, height: AHeight } = block;
           // 当此元素拖拽到和A元素top一致的时候，要显示这根辅助线
           lines.y.push({ showTop: ATop, top: ATop, })
@@ -85,7 +92,9 @@ export function useBlockDragger(focusData, lastSelectBlock) {
   }
   const onMouseup = (e) => {
     document.removeEventListener('mousemove', onMousemove);
-    document.removeEventListener('mouseup', onMouseup)
+    document.removeEventListener('mouseup', onMouseup);
+    markLine.x = null;
+    markLine.y = null;
   }
   return {
     onMousedown,

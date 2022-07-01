@@ -40,7 +40,7 @@ export default defineComponent({
         onMousedown(e)
       });
     // 实现组件拖拽
-    let { onMousedown, markLine } = useBlockDragger(focusData, lastSelectBlock)
+    let { onMousedown, markLine } = useBlockDragger(focusData, lastSelectBlock, data)
 
 
     // 3、实现拖拽多个元素
