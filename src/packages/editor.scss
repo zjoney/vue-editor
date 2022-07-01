@@ -1,3 +1,5 @@
+@import '../iconfont/iconfont.css';
+
 .editor {
   width: 100%;
   height: 100%;
@@ -56,7 +58,24 @@
     height: 80px;
     right: 280px;
     left: 280px;
-    background-color: palegreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-button{
+     width: 60px;
+     height: 60px;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     background: rgba(0,0,0,.3);
+     color: #fff;
+     user-select: none;
+     cursor: pointer;
+     &+&{
+      margin-left: 3px;
+     }
+    }
   }
 
   &-container {
@@ -98,6 +117,7 @@
     border: 3px dashed #f00;
   }
 }
+
 // 移动的left
 .line-x {
   position: absolute;
@@ -105,6 +125,7 @@
   bottom: 0;
   border-left: 1px dashed red
 }
+
 // 移动的top
 .line-y {
   position: absolute;

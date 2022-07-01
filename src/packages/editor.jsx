@@ -6,6 +6,7 @@ import deepcopy from "deepcopy";
 import { useMenuDragger } from "./useMenuDraggers";
 import { useFocus } from './useFocus'
 import { useBlockDragger } from "./useBlockDragger";
+import { useCommands } from "./useCommands";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -43,8 +44,15 @@ export default defineComponent({
     let { onMousedown, markLine } = useBlockDragger(focusData, lastSelectBlock, data)
 
 
-    // 3、实现拖拽多个元素
-    // 点击容器让选中的失去焦点  containerMounseDown
+    const { commands } = useCommands(data)
+    let buttons = [
+      {
+        label: '撤销', icon: 'icon-back', handler: () => commands.undo()
+      },
+      {
+        label: '重做', icon: 'icon-forward', handler: () => commands.redo()
+      }
+    ]
     return () => <div class="editor">
       {/* 根据注册列表渲染内容 可以实现H5拖拽*/}
       <div class="editor-left">
@@ -58,7 +66,14 @@ export default defineComponent({
             <div>{component.preview()}</div>
           </div>))}
       </div>
-      <div class="editor-top">top </div>
+      <div class="editor-top">{
+        buttons.map((btn, index) => {
+          return <div class='editor-top-button' onClick={btn.handler}>
+            <i class={btn.icon}></i>
+            <span>{btn.label}</span>
+          </div>
+        })
+      }</div>
       <div class="editor-right">属性控制栏</div>
       <div class="editor-container">
         {/* 产生滚动条 */}
