@@ -1,14 +1,22 @@
+import { reactive } from "vue"
+
 export function useBlockDragger(focusData, lastSelectBlock) {
   let dragState = {
     startX: 0,
     startY: 0
   }
+  let markLine = reactive({
+    x:null,
+    y:null
+  })
   const onMousedown = (e) => {// 当按下后记录当前位置
     const { width: BWidth, height: BHeight } = lastSelectBlock.value
 
     dragState = {
       startX: e.clientX,
       startY: e.clientY,
+      startLeft: lastSelectBlock.value.left,//拖拽前
+      startTop: lastSelectBlock.value.top,
       startPos: focusData.value.focus.map(({ top, left }) => ({
         top, left
       })),
@@ -29,17 +37,46 @@ export function useBlockDragger(focusData, lastSelectBlock) {
           lines.x.push({ showLeft: ALeft + AWidth / 2, left: ALeft + AWidth / 2 - BWidth / 2, }) // 中间对中间
           lines.x.push({ showLeft: ALeft + AWidth, left: ALeft + AWidth - BWidth, }) // 右对右
           lines.x.push({ showLeft: ALeft + AWidth, left: ALeft - BWidth, }) // 左对右
-
         });
+        console.log(lines)
+        return lines;
       })()
     }
     document.addEventListener('mousemove', onMousemove)
     document.addEventListener('mouseup', onMouseup)
   }
   const onMousemove = (e) => {
-    console.log('move')
     let { clientX: moveX, clientY: moveY } = e;
-    let durX = moveX - dragState.startX;
+    // 计算最新的left  top 去线里面找
+    // 鼠标移动后-鼠标移动前 + left
+    let left  = moveX - dragState.startX + dragState.startLeft;
+    let top  = moveY - dragState.startY + dragState.startTop;
+    // 先计算横线  距离参照物元素还有5像素 就显示这根线
+    let y = null
+    let x = null
+    for(let i=0; i< dragState.lines.y.length; i++){
+      const { top: t, showTop: s} = dragState.lines.y[i];
+      if(Math.abs(t-top)<5){ // 说明接近了
+        y= s;//线需要显示位置
+        moveY = dragState.startY - dragState.startTop + t; //容器距离顶部距离 + 目标高度就是最新的moveY;
+        // 实现快速贴上
+
+        break; // 找到就跳出循环 
+      }
+    }
+    for(let i=0; i< dragState.lines.x.length; i++){
+      const { left: l, showLeft: s} = dragState.lines.x[i];
+      if(Math.abs(l-left)<5){ // 说明接近了
+        x= s;//线需要显示位置
+        moveX = dragState.startX - dragState.startLeft + l; //容器距离顶部距离 + 目标高度就是最新的moveX;
+        // 实现快速贴上
+
+        break; // 找到就跳出循环 
+      }
+    }
+    markLine.x = x; //markline响应式数据 更新数据就会更新视图
+    markLine.y = y;
+    let durX = moveX - dragState.startX;//拖拽前后的距离
     let durY = moveY - dragState.startY;
     focusData.value.focus.forEach((block, index) => {
       block.top = dragState.startPos[index].top + durY
@@ -51,6 +88,7 @@ export function useBlockDragger(focusData, lastSelectBlock) {
     document.removeEventListener('mouseup', onMouseup)
   }
   return {
-    onMousedown
+    onMousedown,
+    markLine
   }
 }

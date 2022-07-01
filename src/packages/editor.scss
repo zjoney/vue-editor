@@ -72,7 +72,7 @@
         margin: 20px auto;
         width: 550px;
         height: 550px;
-        background-color: palevioletred;
+        background-color: #dbc770;
         position: relative;
       }
     }
@@ -97,4 +97,18 @@
   &::after {
     border: 3px dashed #f00;
   }
+}
+// 移动的left
+.line-x {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed red
+}
+// 移动的top
+.line-y {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed red
 }
