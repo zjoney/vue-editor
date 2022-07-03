@@ -1,9 +1,11 @@
 import { reactive } from "vue"
+import { events } from "./events"
 
 export function useBlockDragger(focusData, lastSelectBlock, data) {
   let dragState = {
     startX: 0,
-    startY: 0
+    startY: 0,
+    dragging: false,
   }
   let markLine = reactive({
     x:null,
@@ -17,6 +19,7 @@ export function useBlockDragger(focusData, lastSelectBlock, data) {
       startY: e.clientY,
       startLeft: lastSelectBlock.value.left,//拖拽前
       startTop: lastSelectBlock.value.top,
+      dragging: false,
       startPos: focusData.value.focus.map(({ top, left }) => ({
         top, left
       })),
@@ -45,7 +48,6 @@ export function useBlockDragger(focusData, lastSelectBlock, data) {
           lines.x.push({ showLeft: ALeft + AWidth, left: ALeft + AWidth - BWidth, }) // 右对右
           lines.x.push({ showLeft: ALeft + AWidth, left: ALeft - BWidth, }) // 左对右
         });
-        console.log(lines)
         return lines;
       })()
     }
@@ -54,6 +56,10 @@ export function useBlockDragger(focusData, lastSelectBlock, data) {
   }
   const onMousemove = (e) => {
     let { clientX: moveX, clientY: moveY } = e;
+    if(!dragState.dragging){
+      dragState.dragging = true;
+      events.emit('start');//拖拽之前记录位置
+    }
     // 计算最新的left  top 去线里面找
     // 鼠标移动后-鼠标移动前 + left
     let left  = moveX - dragState.startX + dragState.startLeft;
@@ -95,6 +101,10 @@ export function useBlockDragger(focusData, lastSelectBlock, data) {
     document.removeEventListener('mouseup', onMouseup);
     markLine.x = null;
     markLine.y = null;
+    if(dragState.dragging){// 如果只是点击是不触发
+      dragState.dragging = false;
+      events.emit('end');//拖拽之后记录位置
+    }
   }
   return {
     onMousedown,

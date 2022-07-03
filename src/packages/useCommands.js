@@ -3,20 +3,21 @@ import deepcopy from "deepcopy";
 import { onUnmounted } from "vue";
 import { events } from "./events";
 
-export function useCommands(data) {
+export function useCommand(data) {
   const state = { //前进后腿需要指针
     current: -1,
     queue: [], //存放所有命令
-    commands: {}, // 制作命令和执行功能的映射表
+    commands: {}, // 制作命令和执行功能的映射表 undo
     commandArray: [],//存放所有命令
     destroyArray: []
   }
   const registry = (command) => {
+
     state.commandArray.push(command);
     state.commands[command.name] = () => {
       //命令-名字对应执行函数
       const { redo, undo } = command.execute();
-      redo()
+      redo();
       if (!command.pushQueue) {// 不需要放到队列里直接跳过
         return
       }
@@ -58,7 +59,7 @@ export function useCommands(data) {
           let item = state.queue[state.current];
           if (item) {
             item.undo && item.undo();
-            state.current--
+            state.current--;
           }
         }
       }
@@ -69,15 +70,16 @@ export function useCommands(data) {
     pushQueue: true,
     init() {//初始化操作 默认就执行
       // 监控开始时间，保存状态
-      const start = () =>{
+      this.before = null;
+      const start = () => {
         this.before = deepcopy(data.value.blocks)
       }
       //  拖拽之后需要触发事件
       const end = () => {
-        state.commands.drag()
+        state.commands.drag();
       }
-      events.on('start', start)
-      events.on('end', end)
+      events.on('start', start);
+      events.on('end', end);
       return () => {
         events.off('start', start);
         events.off('end', end);
@@ -93,17 +95,46 @@ export function useCommands(data) {
           }
         },
         undo() {// 前进一步
-          data.value = {
-            ...data.value, blocks: before
+          data.value = {...data.value, blocks: before
           }
         }
       }
     }
   });
+  const keyboardEvent = (() => {
+    const keyCodes = {
+      90: 'z',
+      89: 'y',
+    }
+    const onKeydown = (e) => {
+      const { ctrlKey, keyCode } = e;//ctrl+z/ctrl+y
+      let keyString = [];
+      if (ctrlKey) keyString.push('ctrl');
+      keyString.push(keyCodes[keyCode]);
+      keyString = keyString.join('+')
+      state.commandArray.forEach(({ keyboard, name }) => {
+        if (!keyboard) return; // 没键盘事件
+        if (keyboard === keyString) {
+          state.commands[name]();
+          e.preventDefault();
+        }
+      })
 
-  ; (() => {
-    state.commandArray.forEach(command => command.init && command.init() && state.destroyArray.push(command.init()))
+
+    }
+    const init = () => {
+      window.addEventListener('keydown', onKeydown)
+      return () => { // 销毁事件
+        window.removeEventListener('keydown', onKeydown)
+      }
+    }
+    return init
   })();
+    ; (() => {
+      // 监听键盘事件
+      state.destroyArray.push(keyboardEvent())
+      state.commandArray.forEach(command => command.init && state.destroyArray.push(command.init()))
+    })();
   onUnmounted(() => {
     state.destroyArray.forEach(fn => fn && fn())
   })

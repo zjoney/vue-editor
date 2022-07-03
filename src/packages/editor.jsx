@@ -6,7 +6,7 @@ import deepcopy from "deepcopy";
 import { useMenuDragger } from "./useMenuDraggers";
 import { useFocus } from './useFocus'
 import { useBlockDragger } from "./useBlockDragger";
-import { useCommands } from "./useCommands";
+import { useCommand } from "./useCommands";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -44,7 +44,7 @@ export default defineComponent({
     let { onMousedown, markLine } = useBlockDragger(focusData, lastSelectBlock, data)
 
 
-    const { commands } = useCommands(data)
+    const { commands } = useCommand(data)
     let buttons = [
       {
         label: '撤销', icon: 'icon-back', handler: () => commands.undo()
