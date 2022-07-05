@@ -78,7 +78,7 @@ export default defineComponent({
         label: '置顶', icon: 'icon-place-top', handler: () => commands.placeTop()
       },
       {
-        label: '置底', icon: 'icon-place-bottom', handler: () => commands.redo()
+        label: '置底', icon: 'icon-place-bottom', handler: () => commands.placeBottom()
       },
     ]
     return () => <div class="editor">

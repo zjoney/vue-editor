@@ -146,6 +146,39 @@ export function useCommand(data, focusData) {
       }
     }
   });
+  registry({//置底操作
+    name: 'placeBottom',//更新整个容器
+    pushQueue: 'true',
+    execute() {
+      let before = deepcopy(data.value.blocks);
+      let after = (() => {//就是在所有的block中找到最大的
+        let { focus, unfocused } = focusData.value;
+
+        let minZIndex = unfocused.reduce((pre, block) => {
+          return Math.min(pre, block.zIndex);
+        }, Infinity) - 1;
+        // 不能直接-1，因为Index不能出现负值。
+        // 如果选中的这个是负值，让其他元素+1
+        if (minZIndex < 0) {
+          const dur = Math.abs(minZIndex);
+          minZIndex = 0;
+          unfocused.forEach(block => block.zIndex += dur);
+        }
+        // 如果是正值
+        focus.forEach(block => block.zIndex = minZIndex);
+        return data.value.blocks;
+      })();
+      return {
+        // 如果当前Blocks 前后不一致 则不会更新,deepcopy
+        undo: () => {
+          data.value = { ...data.value, blocks: before };
+        },
+        redo: () => {// 
+          data.value = { ...data.value, blocks: after };
+        },
+      }
+    }
+  });
   const keyboardEvent = (() => {
     const keyCodes = {
       90: 'z',
