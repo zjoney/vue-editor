@@ -19,6 +19,7 @@ export default defineComponent({
   setup(props, ctx) {
     //  预览的时候 内容不能再操作了，可以点击输入内容 方便看效果
     const previewRef = ref(true);
+    const editorRef = ref(true);
 
 
 
@@ -42,7 +43,7 @@ export default defineComponent({
 
     // 2、获取焦点, 选中可能直接进行拖拽
     let { blockMousedown, containerMounseDown, lastSelectBlock,
-      focusData } = useFocus(data, previewRef, (e) => {
+      focusData, clearBlockFocus } = useFocus(data, previewRef, (e) => {
         // 实现焦点后拖拽
         onMousedown(e)
       });
@@ -89,10 +90,36 @@ export default defineComponent({
         label: '删除', icon: 'icon-delete', handler: () => commands.delete()
       },
       {
-        label: () => previewRef.value ? '编辑' : '预览', icon: () => previewRef.value ? 'icon-edit' : 'icon-browse', handler: () => previewRef.value = !previewRef.value
+        label: () => previewRef.value ? '编辑' : '预览', icon: () => previewRef.value ? 'icon-edit' : 'icon-browse', handler: () => {
+          previewRef.value = !previewRef.value;
+          clearBlockFocus();
+        }
       },
+      {
+        lable: '关闭', icon: 'icon-close', handler: () => {
+          editorRef.value = false;
+          clearBlockFocus();
+        }
+      }
     ]
-    return () => <div class="editor">
+    return () => !editorRef.value ? <>
+
+      <div class="editor-container-canvas_content" style={containerStyles.value}
+        style="margin: 0"
+      >
+        {
+          data.value.blocks.map((block, index) => (
+            <EditorBlocks
+
+              class='edit-block-preview'
+              block={block}></EditorBlocks>
+          ))
+        }
+      </div>
+      <div>
+        <ElButton type="primary" onClick={() => editorRef.value = true}>继续编辑</ElButton>
+      </div>
+    </> : <div class="editor">
       {/* 根据注册列表渲染内容 可以实现H5拖拽*/}
       <div class="editor-left">
         {config.componentList.map(component => (

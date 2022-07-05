@@ -47,5 +47,6 @@ export function useFocus(data,previewRef, callback) {
     containerMounseDown,
     focusData,
     lastSelectBlock,
+    clearBlockFocus,
   }
 }
