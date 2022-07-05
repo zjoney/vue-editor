@@ -54,12 +54,6 @@ export default defineComponent({
         label: '重做', icon: 'icon-forward', handler: () => commands.redo()
       },
       {
-        label: '导出aa', icon: 'icon-export', handler: () => console.log('导出')
-      },
-      {
-        label: '导入bbb', icon: 'icon-import', handler: () => console.log('导入')
-      },
-      {
         label: '导出', icon: 'icon-export', handler: () => {
           $dialog({
             title: '导出JSON数据',
