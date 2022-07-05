@@ -14,9 +14,9 @@ export function useCommand(data) {
   const registry = (command) => {
 
     state.commandArray.push(command);
-    state.commands[command.name] = () => {
+    state.commands[command.name] = (...args) => {
       //命令-名字对应执行函数
-      const { redo, undo } = command.execute();
+      const { redo, undo } = command.execute(...args);
       redo();
       if (!command.pushQueue) {// 不需要放到队列里直接跳过
         return
@@ -95,8 +95,27 @@ export function useCommand(data) {
           }
         },
         undo() {// 前进一步
-          data.value = {...data.value, blocks: before
+          data.value = {
+            ...data.value, blocks: before
           }
+        }
+      }
+    }
+  });
+  registry({
+    name: 'updateContainer',//更新整个容器
+    pushQueue: 'true',
+    execute(newValue) {
+      let state = {
+        before: data.value,
+        after: newValue //新值
+      }
+      return {
+        redo: () => {// 
+          data.value = state.after;
+        },
+        undo: () => {// 前进一步
+          data.value = state.before;
         }
       }
     }
@@ -130,11 +149,11 @@ export function useCommand(data) {
     }
     return init
   })();
-    ; (() => {
-      // 监听键盘事件
-      state.destroyArray.push(keyboardEvent())
-      state.commandArray.forEach(command => command.init && state.destroyArray.push(command.init()))
-    })();
+  ; (() => {
+    // 监听键盘事件
+    state.destroyArray.push(keyboardEvent())
+    state.commandArray.forEach(command => command.init && state.destroyArray.push(command.init()))
+  })();
   onUnmounted(() => {
     state.destroyArray.forEach(fn => fn && fn())
   })
