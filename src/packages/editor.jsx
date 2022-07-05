@@ -7,6 +7,7 @@ import { useMenuDragger } from "./useMenuDraggers";
 import { useFocus } from './useFocus'
 import { useBlockDragger } from "./useBlockDragger";
 import { useCommand } from "./useCommands";
+import { $dialog } from "@/components/Dialog";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -51,6 +52,32 @@ export default defineComponent({
       },
       {
         label: '重做', icon: 'icon-forward', handler: () => commands.redo()
+      },
+      {
+        label: '导出aa', icon: 'icon-export', handler: () => console.log('导出')
+      },
+      {
+        label: '导入bbb', icon: 'icon-import', handler: () => console.log('导入')
+      },
+      {
+        label: '导出', icon: 'icon-export', handler: () => {
+          $dialog({
+            title: '导出JSON数据',
+            content: JSON.stringify(data.value)
+          })
+        },
+      },
+      {
+        label: '导入', icon: 'icon-import', handler: () => {
+          $dialog({
+            title: '导入JSON数据',
+            content: '',
+            footer: true,
+            onConfirm(content) {
+              data.value = JSON.parse(content);
+            }
+          })
+        }
       }
     ]
     return () => <div class="editor">
