@@ -3,7 +3,7 @@ import deepcopy from "deepcopy";
 import { onUnmounted } from "vue";
 import { events } from "./events";
 
-export function useCommand(data) {
+export function useCommand(data, focusData) {
   const state = { //前进后腿需要指针
     current: -1,
     queue: [], //存放所有命令
@@ -117,6 +117,32 @@ export function useCommand(data) {
         undo: () => {// 前进一步
           data.value = state.before;
         }
+      }
+    }
+  });
+  registry({//置顶操作
+    name: 'placeTop',//更新整个容器
+    pushQueue: 'true',
+    execute(newValue) {
+      let before = deepcopy(data.value.blocks);
+      let after = (() => {//就是在所有的block中找到最大的
+        let { focus, unfocused } = focusData.value;
+
+        let maxZIndex = unfocused.reduce((pre, block) => {
+          return Math.max(pre, block.zIndex);
+        }, -Infinity)
+        // 让当前选中zindex  +1
+        focus.forEach(block => block.zIndex = maxZIndex + 1);
+        return data.value.blocks;
+      })();
+      return {
+        // 如果当前Blocks 前后不一致 则不会更新,deepcopy
+        undo: () => {
+          data.value = { ...data.value, blocks: before };
+        },
+        redo: () => {// 
+          data.value = { ...data.value, blocks: after };
+        },
       }
     }
   });

@@ -45,7 +45,7 @@ export default defineComponent({
     let { onMousedown, markLine } = useBlockDragger(focusData, lastSelectBlock, data)
 
 
-    const { commands } = useCommand(data)
+    const { commands } = useCommand(data, focusData)
     let buttons = [
       {
         label: '撤销', icon: 'icon-back', handler: () => commands.undo()
@@ -72,8 +72,14 @@ export default defineComponent({
               commands.updateContainer(JSON.parse(text))
             }
           })
-        }
-      }
+        },
+      },
+      {
+        label: '置顶', icon: 'icon-place-top', handler: () => commands.placeTop()
+      },
+      {
+        label: '置底', icon: 'icon-place-bottom', handler: () => commands.redo()
+      },
     ]
     return () => <div class="editor">
       {/* 根据注册列表渲染内容 可以实现H5拖拽*/}
