@@ -67,7 +67,7 @@ export default defineComponent({
             title: '导入JSON数据',
             content: '',
             footer: true,
-            onConfirm(content) {
+            onConfirm(content) { //无法保留历史数据
               data.value = JSON.parse(content);
             }
           })

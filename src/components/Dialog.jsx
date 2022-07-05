@@ -8,7 +8,7 @@ const DialogComponent = defineComponent({
   },
   setup(props, ctx) {
     const state = reactive({
-      option: props.option,
+      option: props.option,// 用户给组件的属性
       isShow: false
     });
     const onCancel = () => { // 取消时关闭窗口
@@ -19,7 +19,7 @@ const DialogComponent = defineComponent({
         state.option.onConfirm(state.option.content);
       state.isShow = false;
     }
-    ctx.expose({
+    ctx.expose({// 让外界可以调用方法
       showDialog: (option) => {
         state.option = option;
         state.isShow = true;
@@ -40,7 +40,7 @@ const DialogComponent = defineComponent({
 
 let vm;
 export const $dialog = (option) => {
-  if (!vm) {
+  if (!vm) { // 没有dialog就手动挂载
     const el = document.createElement('div');
     vm = createVNode(DialogComponent, { option }); // 渲染组件
     document.body.appendChild((render(vm, el), el));
