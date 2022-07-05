@@ -179,6 +179,24 @@ export function useCommand(data, focusData) {
       }
     }
   });
+  registry({//删除操作
+    name: 'delete',//更新整个容器
+    pushQueue: 'true',
+    execute() {
+      let state= {
+        before : deepcopy(data.value.blocks),//当前值
+        after: focusData.value.unfocused,//选中都删除
+      }
+      return {
+        undo: () => {
+          data.value = { ...data.value, blocks: state.before };
+        },
+        redo: () => {// 
+          data.value = { ...data.value, blocks: state.after };
+        },
+      }
+    }
+  });
   const keyboardEvent = (() => {
     const keyCodes = {
       90: 'z',

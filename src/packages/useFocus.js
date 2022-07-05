@@ -1,6 +1,6 @@
 
 import { computed, ref } from 'vue';
-export function useFocus(data, callback) {
+export function useFocus(data,previewRef, callback) {
   const selectIndex = ref(-1);
   // 最后选择的那一个
   const lastSelectBlock = computed(() => data.value.blocks[selectIndex.value])
@@ -18,10 +18,12 @@ export function useFocus(data, callback) {
     data.value.blocks.forEach(block => block.focus = false)
   }
   const containerMounseDown = () => {
+    if(previewRef.value) return;
     clearBlockFocus();
     selectIndex.value = -1;
   }
   const blockMousedown = (e, block, index) => {
+    if(previewRef.value) return;
     e.preventDefault();
     e.stopPropagation();
     //  block上我们规划一个属性，focus获取焦点后将focus变为true
