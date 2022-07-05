@@ -117,7 +117,11 @@
     border: 3px dashed #f00;
   }
 }
-
+.edit-block-preview{
+  &::after {
+   display: none;
+  }
+}
 // 移动的left
 .line-x {
   position: absolute;

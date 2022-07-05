@@ -128,6 +128,7 @@ export default defineComponent({
               data.value.blocks.map((block, index) => (
                 <EditorBlocks
                   class={block.focus ? 'editor-block-focus' : ''}
+                  class={previewRef.value ? 'edit-block-preview' : ''}
                   onMousedown={(e) => blockMousedown(e, block, index)}
                   block={block}></EditorBlocks>
               ))
