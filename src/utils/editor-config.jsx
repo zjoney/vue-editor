@@ -23,37 +23,37 @@ const createSlectProp = (label, options) => ({ type: 'select', label, options })
 registerConfig.register({
   label: '文本',
   preview: () => '预览文本',
-  render: () => '渲染文本',
+  render: ({ props }) => <span style={{ color: props.color, fontSize: props.size }}>{props.text || '渲染文本'}</span>,
   key: 'text',
   props: {
     text: createInputProp('文本内容'),
     color: createColorProp('字体颜色'),
     size: createSlectProp('字体大小', [
-      {label: '14px', value: '14px'}, 
-      {label: '20px', value: '20px'}, 
-      {label: '24px', value: '24px'}
+      { label: '14px', value: '14px' },
+      { label: '20px', value: '20px' },
+      { label: '24px', value: '24px' }
     ])
   }
 })
 registerConfig.register({
   label: '按钮',
   preview: () => <ElButton>预览按钮</ElButton>,
-  render: () => <ElButton>渲染按钮</ElButton>,
+  render: ({ props }) => <ElButton type={props.type} size={props.size}>{props.text || '渲染按钮'}</ElButton>,
   key: 'button',
   props: {
     text: createInputProp('按钮内容'),
     type: createSlectProp('按钮类型', [
-      {label: '基础', value: 'primary'}, 
-      {label: '成功', value: 'success'}, 
-      {label: '警告', value: 'warning'}, 
-      {label: '危险', value: 'danger'}, 
-      {label: '文本', value: 'text'},
+      { label: '基础', value: 'primary' },
+      { label: '成功', value: 'success' },
+      { label: '警告', value: 'warning' },
+      { label: '危险', value: 'danger' },
+      { label: '文本', value: 'text' },
     ]),
     size: createSlectProp('按钮尺寸', [
-      {label: '默认', value: ''}, 
-      {label: '中等', value: 'medium'}, 
-      {label: '小', value: 'small'}, 
-      {label: '极小', value: 'min'}, 
+      { label: '默认', value: '' },
+      { label: '中等', value: 'medium' },
+      { label: '小', value: 'small' },
+      { label: '极小', value: 'min' },
     ])
   }
 })

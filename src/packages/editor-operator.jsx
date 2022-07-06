@@ -8,21 +8,31 @@ export default defineComponent({
   props: {
     block: { type: Object },
     data: { type: Object }, //所有数据
+    updateContainer: { type: Function },
+    updateBlock: { type: Function },
   },
   setup(props, ctx) {
     const config = inject('config');//组件的配置信息
     const state = reactive({
-      editData:{}
+      editData: {}
     })
-    const reset=()=>{
-      if(!props.block){
+    const reset = () => {
+      if (!props.block) {
         //说明绑定是容器的宽度 高度
-        state.editData =deepcopy(props.data.container)
-      }else{
+        state.editData = deepcopy(props.data.container)
+      } else {
         state.editData = deepcopy(props.block);
       }
     }
-    watch(()=>props.block, reset, {immediate: true})
+    const apply = () => {
+      if (!props.block) {
+        //更改是容器的宽度 高度
+        props.updateContainer({ ...props.data, container: state.editData });
+      } else {
+        props.updateBlock(state.editData, props.block);
+      }
+    }
+    watch(() => props.block, reset, { immediate: true })
     return () => {
       let content = []
       if (!props.block) {
@@ -31,7 +41,7 @@ export default defineComponent({
             <ElInputNumber v-model={state.editData.width}></ElInputNumber>
           </ElFormItem>
           <ElFormItem label="容器高度">
-            <ElInputNumber  v-model={state.editData.height}></ElInputNumber>
+            <ElInputNumber v-model={state.editData.height}></ElInputNumber>
           </ElFormItem>
         </>)
       } else {
@@ -41,7 +51,7 @@ export default defineComponent({
             return <ElFormItem label={propConfig.label}>
               {{
                 // {text: '', color: ''}
-                input: () => (<ElInput  v-model={state.editData.props[propName]}/>),
+                input: () => (<ElInput v-model={state.editData.props[propName]} />),
                 color: () => (<ElColorPicker v-model={state.editData.props[propName]}>
                 </ElColorPicker>),
                 select: () => <ElSelect v-model={state.editData.props[propName]}>
@@ -60,8 +70,8 @@ export default defineComponent({
       return <ElForm labelPosition='top' style='padding: 30px'>
         {content}
         <ElFormItem>
-          <ElButton type='primary'>应用</ElButton>
-          <ElButton >重置</ElButton>
+          <ElButton type='primary' onClick={() => apply()}>应用</ElButton>
+          <ElButton onClick={reset} >重置</ElButton>
         </ElFormItem>
       </ElForm>
     }

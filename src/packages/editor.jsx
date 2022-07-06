@@ -175,6 +175,8 @@ export default defineComponent({
       <div class="editor-right"><EditorOperator
         block={lastSelectBlock.value}
         data={data.value}
+        updateContainer={commands.updateContainer}
+        updateBlock={commands.updateBlock}
       ></EditorOperator></div>
       <div class="editor-container">
         {/* 产生滚动条 */}
