@@ -8,6 +8,7 @@ import { useFocus } from './useFocus'
 import { useBlockDragger } from "./useBlockDragger";
 import { useCommand } from "./useCommands";
 import { $dialog } from "@/components/Dialog";
+import { $dropdown } from "@/components/Dropdown";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -18,7 +19,7 @@ export default defineComponent({
   emits: ['update:modelValue'], // 要触发的时间
   setup(props, ctx) {
     //  预览的时候 内容不能再操作了，可以点击输入内容 方便看效果
-    const previewRef = ref(true);
+    const previewRef = ref(false);
     const editorRef = ref(true);
 
 
@@ -101,7 +102,15 @@ export default defineComponent({
           clearBlockFocus();
         }
       }
-    ]
+    ];
+
+    const onContextmenuBlock =(e, block)=>{
+      e.preventDefault();
+      $dropdown({
+        el: e.target, // 在哪个元素为准产生dropdown
+      })
+    };
+
     return () => !editorRef.value ? <>
 
       <div class="editor-container-canvas_content" style={containerStyles.value}
@@ -156,8 +165,10 @@ export default defineComponent({
                 <EditorBlocks
                   class={block.focus ? 'editor-block-focus' : ''}
                   class={previewRef.value ? 'edit-block-preview' : ''}
+                  block={block}
                   onMousedown={(e) => blockMousedown(e, block, index)}
-                  block={block}></EditorBlocks>
+                  onContextmenu={(e) => onContextmenuBlock(e, block)}
+                  ></EditorBlocks>
               ))
             }
             {markLine.x != null && <div
