@@ -9,6 +9,7 @@ import { useBlockDragger } from "./useBlockDragger";
 import { useCommand } from "./useCommands";
 import { $dialog } from "@/components/Dialog";
 import { $dropdown, DropdownItem } from "@/components/Dropdown";
+import EditorOperator from "./editor-operator";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -113,15 +114,15 @@ export default defineComponent({
             <DropdownItem label="删除" icon="icon-delete" onClick={() => { commands.delete() }}></DropdownItem>
             <DropdownItem label="置顶" icon="icon-place-top" onClick={() => { commands.placeTop() }}></DropdownItem>
             <DropdownItem label="置底" icon="icon-place-bottom" onClick={() => { commands.placeBottom() }}></DropdownItem>
-            <DropdownItem label="查看" icon="icon-browse" onClick={() =>$dialog({
+            <DropdownItem label="查看" icon="icon-browse" onClick={() => $dialog({
               title: '查看节点数据',
               content: JSON.stringify(block)
             })}></DropdownItem>
-            <DropdownItem label="导入" icon="icon-import" onClick={() =>$dialog({
+            <DropdownItem label="导入" icon="icon-import" onClick={() => $dialog({
               title: '导入节点数据',
               content: '',
               footer: true,
-              onConfirm(text){
+              onConfirm(text) {
                 text = JSON.parse(text);
                 commands.updateBlock(text, block)
               }
@@ -171,7 +172,10 @@ export default defineComponent({
           </div>
         })
       }</div>
-      <div class="editor-right">属性控制栏</div>
+      <div class="editor-right"><EditorOperator
+        block={lastSelectBlock.value}
+        data={data.value}
+      ></EditorOperator></div>
       <div class="editor-container">
         {/* 产生滚动条 */}
         <div class="editor-container-canvas">
