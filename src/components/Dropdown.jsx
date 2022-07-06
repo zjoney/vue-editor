@@ -1,5 +1,5 @@
 
-import { computed, createVNode, defineComponent, onBeforeUnmount, onMounted, reactive, ref, render } from "vue";
+import { provide, inject, computed, createVNode, defineComponent, onBeforeUnmount, onMounted, reactive, ref, render } from "vue";
 
 export const DropdownItem = defineComponent({
   props: {
@@ -8,14 +8,15 @@ export const DropdownItem = defineComponent({
   },
   setup(props) {
     let { label, icon } = props;
-    return () => <div class="dropdown-item">
+    let hide = inject('hide')
+    return () => <div class="dropdown-item" onClick={hide}>
       <i class={icon}></i>
       <span>{label}</span>
     </div>
   }
 })
 
-const DialogComponent = defineComponent({
+const DropdownComponent = defineComponent({
   props: {
     option: { type: Object },
   },
@@ -36,6 +37,7 @@ const DialogComponent = defineComponent({
         state.left = left;
       }
     })
+    provide('hide', () => state.isShow = false)
     const classes = computed(() => [
       'dropdown',
       {
@@ -73,7 +75,7 @@ let vm;
 export const $dropdown = (option) => {
   if (!vm) { // 没有dropdown就手动挂载
     const el = document.createElement('div');
-    vm = createVNode(DialogComponent, { option }); // 渲染组件
+    vm = createVNode(DropdownComponent, { option }); // 渲染组件
     document.body.appendChild((render(vm, el), el));
   }
   let { showDropdown } = vm.component.exposed;

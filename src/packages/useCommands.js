@@ -120,6 +120,31 @@ export function useCommand(data, focusData) {
       }
     }
   });
+  registry({
+    name: 'updateBlock',//更新某一个
+    pushQueue: 'true',
+    execute(newBlock, oldBlock) {
+      let state = {
+        before: data.value.blocks,
+        after: (() => {
+          let blocks = [...data.value.blocks];// 拷贝一份新的
+          const index = data.value.blocks.indexOf(oldBlock);
+          if(index > -1){
+            blocks.splice(index, 1, newBlock);
+          }
+          return blocks;
+        })()
+      }
+      return {
+        redo: () => {
+          data.value = {...data.value, blocks: state.after};
+        },
+        undo: () => {
+          data.value ={...data.value, before: state.before};
+        }
+      }
+    }
+  });
   registry({//置顶操作
     name: 'placeTop',//更新整个容器
     pushQueue: 'true',
@@ -183,8 +208,8 @@ export function useCommand(data, focusData) {
     name: 'delete',//更新整个容器
     pushQueue: 'true',
     execute() {
-      let state= {
-        before : deepcopy(data.value.blocks),//当前值
+      let state = {
+        before: deepcopy(data.value.blocks),//当前值
         after: focusData.value.unfocused,//选中都删除
       }
       return {
