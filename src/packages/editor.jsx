@@ -8,7 +8,7 @@ import { useFocus } from './useFocus'
 import { useBlockDragger } from "./useBlockDragger";
 import { useCommand } from "./useCommands";
 import { $dialog } from "@/components/Dialog";
-import { $dropdown } from "@/components/Dropdown";
+import { $dropdown, DropdownItem } from "@/components/Dropdown";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -104,10 +104,19 @@ export default defineComponent({
       }
     ];
 
-    const onContextmenuBlock =(e, block)=>{
+    const onContextmenuBlock = (e, block) => {
       e.preventDefault();
       $dropdown({
         el: e.target, // 在哪个元素为准产生dropdown
+        content: ()=>{
+          return <>
+          <DropdownItem label="删除" icon="icon-delete" onClick={() => { }}></DropdownItem>
+          <DropdownItem label="置顶" icon="icon-place-top" onClick={() => { }}></DropdownItem>
+          <DropdownItem label="置底" icon="icon-place-bottom" onClick={() => { }}></DropdownItem>
+          <DropdownItem label="查看" icon="icon-browse" onClick={() => { }}></DropdownItem>
+          <DropdownItem label="导入" icon="icon-import" onClick={() => { }}></DropdownItem>
+        </>
+        }
       })
     };
 
@@ -168,7 +177,7 @@ export default defineComponent({
                   block={block}
                   onMousedown={(e) => blockMousedown(e, block, index)}
                   onContextmenu={(e) => onContextmenuBlock(e, block)}
-                  ></EditorBlocks>
+                ></EditorBlocks>
               ))
             }
             {markLine.x != null && <div

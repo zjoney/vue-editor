@@ -1,6 +1,20 @@
 
 import { computed, createVNode, defineComponent, onBeforeUnmount, onMounted, reactive, ref, render } from "vue";
 
+export const DropdownItem = defineComponent({
+  props: {
+    label: String,
+    icon: String,
+  },
+  setup(props) {
+    let { label, icon } = props;
+    return () => <div class="dropdown-item">
+      <i class={icon}></i>
+      <span>{label}</span>
+    </div>
+  }
+})
+
 const DialogComponent = defineComponent({
   props: {
     option: { type: Object },
@@ -48,7 +62,7 @@ const DialogComponent = defineComponent({
     })
     return () => {
       return <div class={classes.value} style={styles.value} ref={el}>
-        下拉菜单区域
+        {state.option.content()}
       </div>
     }
   }
