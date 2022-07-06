@@ -1,5 +1,5 @@
 
-import { computed, createVNode, defineComponent, reactive, render } from "vue";
+import { computed, createVNode, defineComponent, onBeforeUnmount, onMounted, reactive, ref, render } from "vue";
 
 const DialogComponent = defineComponent({
   props: {
@@ -31,9 +31,23 @@ const DialogComponent = defineComponent({
     const styles = computed(() => ({
       top: state.top + 'px',
       left: state.left + 'px'
-    }))
+    }));
+    const el = ref(null)
+    const onMousedownDocument = (e) => {
+      if (!el.value.contains(e.target)) {//如果点击是dropdown内部 什么都不做
+        state.isShow = false;
+      }
+    }
+    onMounted(() => {
+      // 事件传的行为，先捕获再冒泡
+      // 之前都增加了stopPropgation
+      document.body.addEventListener('mousedown', onMousedownDocument, true)
+    });
+    onBeforeUnmount(() => {
+      document.body.removeEventListener('mousedown', onMousedownDocument)
+    })
     return () => {
-      return <div class={classes.value} style={styles.value}>
+      return <div class={classes.value} style={styles.value} ref={el}>
         下拉菜单区域
       </div>
     }
