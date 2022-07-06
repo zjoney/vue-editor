@@ -1,5 +1,6 @@
 import { ElForm, ElFormItem, ElButton, ElInput, ElInputNumber, ElColorPicker, ElSelect, ElOption } from "element-plus"
-import { defineComponent, inject } from "vue"
+import { defineComponent, inject, reactive, watch } from "vue"
+import deepcopy from 'deepcopy'
 
 
 
@@ -10,15 +11,27 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const config = inject('config');//组件的配置信息
+    const state = reactive({
+      editData:{}
+    })
+    const reset=()=>{
+      if(!props.block){
+        //说明绑定是容器的宽度 高度
+        state.editData =deepcopy(props.data.container)
+      }else{
+        state.editData = deepcopy(props.block);
+      }
+    }
+    watch(()=>props.block, reset, {immediate: true})
     return () => {
       let content = []
       if (!props.block) {
         content.push(<>
           <ElFormItem label="容器宽度">
-            <ElInputNumber></ElInputNumber>
+            <ElInputNumber v-model={state.editData.width}></ElInputNumber>
           </ElFormItem>
           <ElFormItem label="容器高度">
-            <ElInputNumber></ElInputNumber>
+            <ElInputNumber  v-model={state.editData.height}></ElInputNumber>
           </ElFormItem>
         </>)
       } else {
@@ -27,10 +40,11 @@ export default defineComponent({
           content.push(Object.entries(component.props).map(([propName, propConfig]) => {
             return <ElFormItem label={propConfig.label}>
               {{
-                input: () => (<ElInput />),
-                color: () => (<ElColorPicker >
+                // {text: '', color: ''}
+                input: () => (<ElInput  v-model={state.editData.props[propName]}/>),
+                color: () => (<ElColorPicker v-model={state.editData.props[propName]}>
                 </ElColorPicker>),
-                select: () => <ElSelect>
+                select: () => <ElSelect v-model={state.editData.props[propName]}>
                   {propConfig.options.map(opt => (
                     <ElOption label={opt.label}
                       value={opt.value}>{opt.value}</ElOption>

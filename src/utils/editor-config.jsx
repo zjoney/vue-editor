@@ -21,7 +21,7 @@ const createInputProp = (label) => ({ type: 'input', label })
 const createColorProp = (label) => ({ type: 'color', label })
 const createSlectProp = (label, options) => ({ type: 'select', label, options })
 registerConfig.register({
-  label: 'wenben',
+  label: '文本',
   preview: () => '预览文本',
   render: () => '渲染文本',
   key: 'text',
