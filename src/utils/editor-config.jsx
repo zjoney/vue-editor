@@ -50,7 +50,7 @@ registerConfig.register({
       { label: '文本', value: 'text' },
     ]),
     size: createSlectProp('按钮尺寸', [
-      { label: '默认', value: '' },
+      { label: '默认', value: 'default' },
       { label: '中等', value: 'medium' },
       { label: '小', value: 'small' },
       { label: '极小', value: 'min' },
