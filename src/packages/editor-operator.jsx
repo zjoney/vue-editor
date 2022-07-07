@@ -65,6 +65,19 @@ export default defineComponent({
           })
           )
         }
+        // 根据model渲染
+        if (component && component.model) {
+          content.push(<>{
+            Object.entries(component.model).map(([modelName, label]) => {
+              return <ElFormItem label={label}>
+               {/* model = >{default:username} */}
+                <ElInput v-model={state.editData.model[modelName]}></ElInput>
+              </ElFormItem>
+            })
+          }
+          </>)
+        }
+
       }
 
       return <ElForm labelPosition='top' style='padding: 30px'>

@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Editor v-model="state" />
+    <Editor v-model="state" :formData="formData" />
   </div>
 </template>
 
@@ -17,8 +17,14 @@ export default {
   setup() {
     const state = ref(data);
     provide("config", config); // 将组件直接传出去
+    const formData = ref({
+      username: "zf",
+      password: "123",
+    });
+
     return {
       state,
+      formData,
     };
   },
 };

@@ -31,7 +31,9 @@
       "top": 300,
       "left": 300,
       "zIndex": 1,
-      "key": "input"
+      "key": "input",
+      "props":{},
+      "model":{}
     }
   ]
 }

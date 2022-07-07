@@ -15,7 +15,8 @@ export default defineComponent({
     EditorBlocks,
   },
   props: {
-    modelValue: { type: Object } // 接收数据 根据v-modal来的
+    modelValue: { type: Object }, // 接收数据 根据v-modal来的
+    formData: { type: Object }
   },
   emits: ['update:modelValue'], // 要触发的时间
   setup(props, ctx) {
@@ -38,7 +39,6 @@ export default defineComponent({
       height: data.value.container.height + 'px'
     }))
     const config = inject('config');
-
     const containerRef = ref(null);
     //1、 实现菜单拖拽功能
     let { dragstart, dragend } = useMenuDragger(containerRef, data);
@@ -142,7 +142,9 @@ export default defineComponent({
             <EditorBlocks
 
               class='edit-block-preview'
-              block={block}></EditorBlocks>
+              block={block}
+              formData={props.formData}
+              ></EditorBlocks>
           ))
         }
       </div>
@@ -194,6 +196,7 @@ export default defineComponent({
                   block={block}
                   onMousedown={(e) => blockMousedown(e, block, index)}
                   onContextmenu={(e) => onContextmenuBlock(e, block)}
+                  formData={props.formData}
                 ></EditorBlocks>
               ))
             }
