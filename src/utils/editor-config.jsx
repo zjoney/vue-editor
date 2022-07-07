@@ -3,7 +3,7 @@
  * key对应的组件映射关系
  */
 import Range from '@/components/Range'
-import { ElButton, ElInput, ElSelect } from 'element-plus'
+import { ElButton, ElInput, ElOption, ElSelect } from 'element-plus'
 
 function createEditorConfig() {
   const componentList = []
@@ -25,25 +25,31 @@ const createTableProp = (label, table) => ({ type: 'table', label, table })
 registerConfig.register({
   label: '下拉框',
   preview: () => <ElSelect></ElSelect>,
-  render: ({ props }) => {
+  render: ({ props, model }) => {
 
-    return <ElSelect ></ElSelect>
+    return <ElSelect {...model.default}>{(props.options || []).map((opt, index) => {
+      return <ElOption label={opt.label} value={opt.value} key={index}>
+      </ElOption>
+    })}</ElSelect>
   },
   key: 'select',
   props: {
     options: createTableProp('下拉选项', {
-      options:[
-        {label: '显示值', filed: 'label'},
-        {label: '绑定值', filed: 'value'},
+      options: [
+        { label: '显示值', filed: 'label' },
+        { label: '绑定值', filed: 'value' },
       ],
       key: 'label'// 显示给用户的值 
     })
+  },
+  model: {
+    default: '绑定字段'
   }
 });
 registerConfig.register({
   label: '文本',
   preview: () => '预览文本',
-  render: ({ props }) => <span style={{ color: props.color, fontSize: props.size }}>{props.text || '渲染文本'}</span>,
+  render: ({ props, }) => <span style={{ color: props.color, fontSize: props.size }}>{props.text || '渲染文本'}</span>,
   key: 'text',
   props: {
     text: createInputProp('文本内容'),

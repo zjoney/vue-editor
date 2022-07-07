@@ -23,13 +23,15 @@ const TableComponent = defineComponent({
     const add = () => {
       state.editData.push({})
     }
-    const onCancel=()=>state.isShow = false;
+    const onCancel=()=>{
+      state.isShow = false;
+    }
     const onConfirm=()=>{
-      state.option.onConfirm(state.editData)
+      state.option.onConfirm(state.editData);
+      onCancel();
     }
     ctx.expose(methods);
     return () => {
-      console.log('', state.option.config.table.options)
       return <ElDialog v-model={state.isShow} title={state.option.config.label}>
         {{
           default: () => (
