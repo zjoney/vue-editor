@@ -1,6 +1,7 @@
-import { ElForm, ElFormItem, ElButton, ElInput, ElInputNumber, ElColorPicker, ElSelect, ElOption } from "element-plus"
+import { ElForm, ElFormItem, ElButton, ElInput, ElInputNumber, ElColorPicker, ElSelect, ElOption, ElTable } from "element-plus"
 import { defineComponent, inject, reactive, watch } from "vue"
 import deepcopy from 'deepcopy'
+import TableEditor from "./table-editor";
 
 
 
@@ -59,7 +60,8 @@ export default defineComponent({
                     <ElOption label={opt.label}
                       value={opt.value}>{opt.value}</ElOption>
                   ))}
-                </ElSelect>
+                </ElSelect>,
+                table: () => <TableEditor propConfig={propConfig}  v-model={state.editData.props[propName]} ></TableEditor>
               }[propConfig.type]()}
             </ElFormItem>
           })
@@ -70,7 +72,7 @@ export default defineComponent({
           content.push(<>{
             Object.entries(component.model).map(([modelName, label]) => {
               return <ElFormItem label={label}>
-               {/* model = >{default:username} */}
+                {/* model = >{default:username} */}
                 <ElInput v-model={state.editData.model[modelName]}></ElInput>
               </ElFormItem>
             })

@@ -3,7 +3,7 @@
  * key对应的组件映射关系
  */
 import Range from '@/components/Range'
-import { ElButton, ElInput } from 'element-plus'
+import { ElButton, ElInput, ElSelect } from 'element-plus'
 
 function createEditorConfig() {
   const componentList = []
@@ -21,6 +21,25 @@ export let registerConfig = createEditorConfig();
 const createInputProp = (label) => ({ type: 'input', label })
 const createColorProp = (label) => ({ type: 'color', label })
 const createSlectProp = (label, options) => ({ type: 'select', label, options })
+const createTableProp = (label, table) => ({ type: 'table', label, table })
+registerConfig.register({
+  label: '下拉框',
+  preview: () => <ElSelect></ElSelect>,
+  render: ({ props }) => {
+
+    return <ElSelect ></ElSelect>
+  },
+  key: 'select',
+  props: {
+    options: createTableProp('下拉选项', {
+      options:[
+        {label: '显示值', filed: 'label'},
+        {label: '绑定值', filed: 'value'},
+      ],
+      key: 'label'// 显示给用户的值 
+    })
+  }
+});
 registerConfig.register({
   label: '文本',
   preview: () => '预览文本',
@@ -73,7 +92,7 @@ registerConfig.register({
   label: '范围选择器',
   preview: () => <Range placeholder='预览范围选择器'></Range>,
   render: ({ model }) => {
-    console.log(model);
+
     return <Range {...{
       start: model.start.modelValue,
       end: model.end.modelValue,
@@ -82,7 +101,7 @@ registerConfig.register({
 
     }}></Range>
   },
- key: 'range',
+  key: 'range',
   model: {
     start: '开始字段',
     end: '结束字段',
