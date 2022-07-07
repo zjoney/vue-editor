@@ -2,6 +2,7 @@
  * 列表是显示所有的物料
  * key对应的组件映射关系
  */
+import Range from '@/components/Range'
 import { ElButton, ElInput } from 'element-plus'
 
 function createEditorConfig() {
@@ -60,11 +61,32 @@ registerConfig.register({
 registerConfig.register({
   label: '输入框',
   preview: () => <ElInput placeholder='预览输入框'></ElInput>,
-  render: ({model}) => <ElInput placeholder='渲染输入框' {...model.default}></ElInput>,
+  render: ({ model }) => <ElInput placeholder='渲染输入框' {...model.default}></ElInput>,
   key: 'input',
   model: {
     default: '绑定字段'
     // default 等会绑定的model = {modelValue,onUpdate:modelValue}
-     }
+  }
+})
+
+registerConfig.register({
+  label: '范围选择器',
+  preview: () => <Range placeholder='预览范围选择器'></Range>,
+  render: ({ model }) => {
+    console.log(model);
+    return <Range {...{
+      start: model.start.modelValue,
+      end: model.end.modelValue,
+      "onUpdate:start": model.start["onUpdate:modelValue"],
+      "onUpdate:end": model.end["onUpdate:modelValue"],
+
+    }}></Range>
+  },
+ key: 'range',
+  model: {
+    start: '开始字段',
+    end: '结束字段',
+    // default 等会绑定的model = {modelValue,onUpdate:modelValue}
+  }
 })
 

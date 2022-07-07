@@ -10,6 +10,7 @@ import { useCommand } from "./useCommands";
 import { $dialog } from "@/components/Dialog";
 import { $dropdown, DropdownItem } from "@/components/Dropdown";
 import EditorOperator from "./editor-operator";
+import { ElButton } from "element-plus";
 export default defineComponent({
   components: {
     EditorBlocks,
@@ -150,6 +151,7 @@ export default defineComponent({
       </div>
       <div>
         <ElButton type="primary" onClick={() => editorRef.value = true}>继续编辑</ElButton>
+        {JSON.stringify(props.formData)}
       </div>
     </> : <div class="editor">
       {/* 根据注册列表渲染内容 可以实现H5拖拽*/}

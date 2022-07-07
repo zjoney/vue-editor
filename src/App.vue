@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <Editor v-model="state" :formData="formData" />
+    <!-- <Range :start="0" :end="100"></Range> -->
   </div>
 </template>
 
@@ -9,10 +10,12 @@ import { ref, provide } from "vue";
 import data from "./data.json";
 import Editor from "./packages/editor";
 import { registerConfig as config } from "./utils/editor-config.jsx";
+import Range from "./components/Range.jsx";
 
 export default {
   components: {
     Editor,
+    Range,
   },
   setup() {
     const state = ref(data);
@@ -20,6 +23,8 @@ export default {
     const formData = ref({
       username: "zf",
       password: "123",
+      start: 0,
+      end: 100
     });
 
     return {

@@ -30,13 +30,13 @@ export default defineComponent({
       // 获取render函数
       const RenderComponent = component.render({
         props: props.block.props,
-        // model: props.block.model =>{ default: "username" } =>{modelValue: FormData.username, "onUpdate:modelValie": v=>FormData.username = v},
+        // model: props.block.model =>{ default: "username" } =>{modelValue: FormData.username, "onUpdate:modelValue": v=>FormData.username = v},
         model: Object.keys(component.model || {}).reduce((prev, modelName) => {
           let propName = props.block.model[modelName];
          
           prev[modelName] = {
             modelValue: props.formData[propName],// zf
-            "onUpdate:modelValie": v=>props.formData[propName] = v
+            "onUpdate:modelValue": v=>props.formData[propName] = v
           }
           return prev;
         }, {})
