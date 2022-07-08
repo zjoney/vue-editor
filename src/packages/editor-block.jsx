@@ -30,26 +30,27 @@ export default defineComponent({
       const component = config.componentMap[props.block.key];
       // 获取render函数
       const RenderComponent = component.render({
+        size: props.block.hasResize ? { width: props.block.width, height: props.block.height } : {},
         props: props.block.props,
         // model: props.block.model =>{ default: "username" } =>{modelValue: FormData.username, "onUpdate:modelValue": v=>FormData.username = v},
         model: Object.keys(component.model || {}).reduce((prev, modelName) => {
           let propName = props.block.model[modelName];
-         
+
           prev[modelName] = {
             modelValue: props.formData[propName],// zf
-            "onUpdate:modelValue": v=>props.formData[propName] = v
+            "onUpdate:modelValue": v => props.formData[propName] = v
           }
           return prev;
         }, {})
       });
-      const { width, height} = component.resize || {};
+      const { width, height } = component.resize || {};
 
       return <div class="editor-block" style={blockStyles.value} ref={blockRef}>{RenderComponent}
-      {/* 传递block  修改宽高  component是修改宽还是高 */}
-      {props.block.focus && (width || height) && <BlockResize 
-      block={props.block}
-      component={component}
-      ></BlockResize>}
+        {/* 传递block  修改宽高  component是修改宽还是高 */}
+        {props.block.focus && (width || height) && <BlockResize
+          block={props.block}
+          component={component}
+        ></BlockResize>}
       </div>
     }
   }
