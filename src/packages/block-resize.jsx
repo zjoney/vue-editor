@@ -5,7 +5,7 @@ export default defineComponent({
     block: { type: Object },
     component: { type: Object }
   },
-  setup() {
+  setup(props, ctx) {
     const { width, height } = props.component.resize || {}
     return () => {
       return <>
