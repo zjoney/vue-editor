@@ -12,7 +12,7 @@ export default defineComponent({
       let { clientX, clientY } = e;
       let { startX, startY, startWidth, startHeight, startLeft, startTop } = data;
       let durX = clientX - startX;
-      let durY = clientY - starty;
+      let durY = clientY - startY;
       const width = startWidth + durX;
       const height = startHeight + durY;
       // 拖拽时候改变宽高
@@ -24,7 +24,7 @@ export default defineComponent({
       document.body.removeEventListener('onmousemove', onmousemove);
       document.body.removeEventListener('onmouseup', onmouseup);
     }
-    const onMounsedown = (e, direction) => {
+    const onmousedown = (e, direction) => {
       e.stopPropagation();
       data = {
         startX: e.clientX,
@@ -35,25 +35,25 @@ export default defineComponent({
         startTop: props.block.top,
         direction,
       }
-      document.body.addEventListener('onmousemove', onmousemove);
-      document.body.addEventListener('onmousemup', onmouseup);
+      document.body.addEventListener('mousemove', onmousemove);
+      document.body.addEventListener('mousemup', onmouseup);
     }
     return () => {
       return <>
         {width && <>
-          <div class="block-resize block-resize-left" onMounsedown={(e) => onMounsedown(e, { horizontal: 'start', vertical: 'center' })}></div>
-          <div class="block-resize block-resize-right" onMounsedown={(e) => onMounsedown(e, { horizontal: 'end', vertical: 'center' })}></div>
+          <div class="block-resize block-resize-left" onMousedown={(e) => onmousedown(e, { horizontal: 'start', vertical: 'center' })}></div>
+          <div class="block-resize block-resize-right" onMousedown={(e) => onmousedown(e, { horizontal: 'end', vertical: 'center' })}></div>
         </>}
         {height && <>
-          <div class="block-resize block-resize-top" onMounsedown={(e) => onMounsedown(e, { horizontal: 'center', vertical: 'start' })}></div>
-          <div class="block-resize block-resize-bottom" onMounsedown={(e) => onMounsedown(e, { horizontal: 'center', vertical: 'end' })}></div>
+          <div class="block-resize block-resize-top" onMousedown={(e) => onmousedown(e, { horizontal: 'center', vertical: 'start' })}></div>
+          <div class="block-resize block-resize-bottom" onMousedown={(e) => onmousedown(e, { horizontal: 'center', vertical: 'end' })}></div>
         </>}
 
         {width && height && <>
-          <div class="block-resize block-resize-top-left" onMounsedown={(e) => onMounsedown(e, { horizontal: 'start', vertical: 'start' })}></div>
-          <div class="block-resize block-resize-top-right" onMounsedown={(e) => onMounsedown(e, { horizontal: 'end', vertical: 'start' })}></div>
-          <div class="block-resize block-resize-bottom-left" onMounsedown={(e) => onMounsedown(e, { horizontal: 'end', vertical: 'start' })}></div>
-          <div class="block-resize block-resize-bottom-right" onMounsedown={(e)=>onMounsedown(e, {horizontal: 'end', vertical: 'end'})}></div>
+          <div class="block-resize block-resize-top-left" onMousedown={(e) => onmousedown(e, { horizontal: 'start', vertical: 'start' })}></div>
+          <div class="block-resize block-resize-top-right" onMousedown={(e) => onmousedown(e, { horizontal: 'end', vertical: 'start' })}></div>
+          <div class="block-resize block-resize-bottom-left" onMousedown={(e) => onmousedown(e, { horizontal: 'end', vertical: 'start' })}></div>
+          <div class="block-resize block-resize-bottom-right" onMousedown={(e)=>onmousedown(e, {horizontal: 'end', vertical: 'end'})}></div>
         </>}
       </>
     }
