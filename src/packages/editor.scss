@@ -174,4 +174,26 @@
     display: inline-flex;
   }
 }
-
+.block-resize{
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: blue;
+  z-index: 1;
+}
+.block-resize-top{
+  top: -2px;
+  left: calc(50%-4);
+}
+.block-resize-bottom{
+  bottom: -2px;
+  left: calc(50%-4);
+}
+.block-resize-left{
+  top: calc(50%-4);
+  left: -4px;
+}
+.block-resize-right{
+  top: calc(50%-4); ;
+  right: -4px;
+}
