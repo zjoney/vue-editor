@@ -30,7 +30,6 @@ export function useCommand(data, focusData) {
       }
       queue.push({ redo, undo });//保存指令的前进
       state.current = current + 1;
-      console.log(queue)
     }
   };
   // 注册我们需要的命令
