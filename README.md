@@ -1,5 +1,5 @@
 # vue-visual-editor
-
+可视化拖拽物料。组件编辑器，展示区、物料区
 ## Project setup
 ```
 npm install
